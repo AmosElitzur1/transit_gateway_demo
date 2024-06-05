@@ -28,7 +28,7 @@ resource "aws_ec2_transit_gateway" "second" {
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "second" {
   provider           = aws.second
-  subnet_ids         = [aws_subnet.second.id]
+  subnet_ids         = aws_subnet.second[*].id
   transit_gateway_id = aws_ec2_transit_gateway.second.id
   vpc_id             = aws_vpc.second.id
   tags = {
@@ -68,6 +68,13 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "peer" {
 
 ## first:
 
+resource "aws_route" "first" {
+  provider               = aws.first
+  destination_cidr_block = aws_vpc.second.cidr_block
+  route_table_id         = aws_route_table.first.id
+  transit_gateway_id     = aws_ec2_transit_gateway.first.id
+}
+
 resource "aws_ec2_transit_gateway_route" "first" {
   provider                       = aws.first
   depends_on                     = [aws_ec2_transit_gateway_peering_attachment_accepter.peer]
@@ -76,14 +83,14 @@ resource "aws_ec2_transit_gateway_route" "first" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway.first.association_default_route_table_id
 }
 
-resource "aws_route" "first" {
-  provider               = aws.first
-  destination_cidr_block = aws_vpc.second.cidr_block
-  route_table_id         = aws_route_table.first.id
-  transit_gateway_id     = aws_ec2_transit_gateway.first.id
-}
-
 ##second:
+
+resource "aws_route" "second" {
+  provider               = aws.second
+  destination_cidr_block = aws_vpc.first.cidr_block
+  route_table_id         = aws_route_table.second.id
+  transit_gateway_id     = aws_ec2_transit_gateway.second.id
+}
 
 resource "aws_ec2_transit_gateway_route" "second" {
   provider                       = aws.second
@@ -91,13 +98,6 @@ resource "aws_ec2_transit_gateway_route" "second" {
   destination_cidr_block         = aws_vpc.first.cidr_block
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_peering_attachment.peer.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway.second.association_default_route_table_id
-}
-
-resource "aws_route" "second" {
-  provider               = aws.second
-  destination_cidr_block = aws_vpc.first.cidr_block
-  route_table_id         = aws_route_table.second.id
-  transit_gateway_id     = aws_ec2_transit_gateway.second.id
 }
 
 

@@ -29,10 +29,11 @@ resource "aws_instance" "testing_instance" {
   }
   user_data = <<-EOF
     #!/bin/bash
-    echo "[mysql]" > /home/ubuntu/.my.cnf
-    echo "user=${local.rds_username}" >> /home/ubuntu/.my.cnf
-    echo "password=${local.rds_password}" >> /home/ubuntu/.my.cnf
-    echo "host=${local.rds_host}" >> /home/ubuntu/.my.cnf
+    mkdir -p /home/ssm-user
+    echo "[mysql]" > /home/ssm-user/.my.cnf
+    echo "user=${local.rds_username}" >> /home/ssm-user/.my.cnf
+    echo "password=${local.rds_password}" >> /home/ssm-user/.my.cnf
+    echo "host=${local.rds_host}" >> /home/ssm-user/.my.cnf
   EOF
 }
 

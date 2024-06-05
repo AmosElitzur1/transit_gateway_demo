@@ -1,6 +1,6 @@
 variable "aws_region" {
   type    = string
-  default = "eu-central-1"
+  default = "us-east-1"
 }
 
 variable "instance_type" {
@@ -15,7 +15,7 @@ variable "ssh_username" {
 
 variable "ami_name" {
   type    = string
-  default = "mysql-ubuntu-test"
+  default = "mysql-ubuntu"
 }
 
 packer {

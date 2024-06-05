@@ -17,23 +17,23 @@ variable "assume_role_arn" {
 ### networking:
 
 variable "first_vpc_cidr_block" {
-  type = string
+  type        = string
   description = "Cidr Block of the first VPC"
 }
 
 variable "first_subnet_cidr_block" {
-  type = string
+  type        = string
   description = "Cidr Block of the private subnet in the first VPC"
 }
 
 variable "second_vpc_cidr_block" {
-  type = string
+  type        = string
   description = "Cidr Block of the second VPC"
 }
 
-variable "second_subnet_cidr_block" {
-  type = string
-  description = "Cidr Block of the private subnet in the second VPC"
+variable "second_subnet_cidr_blocks" {
+  type        = list(string)
+  description = "Cidr Blocks of the private subnets in the second VPC"
 }
 
 ### transit gateway: 
