@@ -64,7 +64,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "peer" {
   }
 }
 
-#### allow traffic between the accounts by modify route tables and security group:
+#### allow traffic between the accounts by modify the route tables:
 
 ## first:
 
@@ -83,7 +83,7 @@ resource "aws_ec2_transit_gateway_route" "first" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway.first.association_default_route_table_id
 }
 
-##second:
+## second:
 
 resource "aws_route" "second" {
   provider               = aws.second

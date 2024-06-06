@@ -1,4 +1,4 @@
-# ###  Testing instance
+###  Testing instance
 
 locals {
   rds_username = aws_db_instance.mysql.username
@@ -30,10 +30,12 @@ resource "aws_instance" "testing_instance" {
   user_data = <<-EOF
     #!/bin/bash
     mkdir -p /home/ssm-user
-    echo "[mysql]" > /home/ssm-user/.my.cnf
-    echo "user=${local.rds_username}" >> /home/ssm-user/.my.cnf
-    echo "password=${local.rds_password}" >> /home/ssm-user/.my.cnf
-    echo "host=${local.rds_host}" >> /home/ssm-user/.my.cnf
+    echo """
+    [mysql]
+    user=${local.rds_username}
+    password='${local.rds_password}'
+    host=${local.rds_host}
+    """ > /home/ssm-user/.my.cnf
   EOF
 }
 
